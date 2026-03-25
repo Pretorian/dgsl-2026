@@ -1,4 +1,95 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+
+// Country code mapping for team flags
+const countryCodeMap = {
+  'Argentina': 'ar',
+  'Brazil': 'br',
+  'Egypt': 'eg',
+  'Chile': 'cl',
+  'Costa Rica': 'cr',
+  'Scotland': 'gb-sct',
+  'Japan': 'jp',
+  'Mexico': 'mx',
+  'Madagascar': 'mg',
+  'Spain': 'es',
+  'New Zealand': 'nz',
+  'Germany': 'de',
+  'Norway': 'no',
+  'France/Egypt': 'fr',
+  'Italy': 'it'
+};
+
+// Helper function to get flag URL
+const getFlagUrl = (teamName) => {
+  const code = countryCodeMap[teamName];
+  if (!code) return null;
+  // Using flagcdn.com for high-quality flag images
+  // Format: https://flagcdn.com/w40/{country-code}.png
+  return `https://flagcdn.com/w40/${code}.png`;
+};
+
+// TeamFlag component
+const TeamFlag = ({ teamName }) => {
+  const flagUrl = getFlagUrl(teamName);
+
+  if (!flagUrl) {
+    return <span>{teamName}</span>;
+  }
+
+  return (
+    <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+      <img
+        src={flagUrl}
+        alt={teamName}
+        style={{ width: '28px', height: 'auto', borderRadius: '2px', boxShadow: '0 1px 3px rgba(0,0,0,0.2)' }}
+        onError={(e) => {
+          e.target.style.display = 'none';
+          e.target.nextSibling.style.display = 'inline';
+        }}
+      />
+      <span style={{ display: 'none' }}>{teamName}</span>
+      <span>{teamName}</span>
+    </span>
+  );
+};
+
+// Weather widget component
+const WeatherWidget = ({ weather }) => {
+  if (!weather) {
+    return null;
+  }
+
+  // Simple weather emoji mapping based on condition
+  const getWeatherEmoji = (condition) => {
+    const conditionLower = condition.toLowerCase();
+    if (conditionLower.includes('clear') || conditionLower.includes('sunny')) return '☀️';
+    if (conditionLower.includes('cloud')) return '☁️';
+    if (conditionLower.includes('rain')) return '🌧️';
+    if (conditionLower.includes('storm') || conditionLower.includes('thunder')) return '⛈️';
+    if (conditionLower.includes('snow')) return '❄️';
+    if (conditionLower.includes('fog') || conditionLower.includes('mist')) return '🌫️';
+    return '🌤️';
+  };
+
+  return (
+    <span style={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: '0.25rem',
+      padding: '0.25rem 0.75rem',
+      backgroundColor: 'rgba(255, 255, 255, 0.2)',
+      borderRadius: '1rem',
+      fontSize: '0.95rem',
+      fontWeight: '600'
+    }}>
+      <span>{getWeatherEmoji(weather.condition)}</span>
+      <span>{weather.temp}°F</span>
+      <span style={{ fontSize: '0.8rem', fontWeight: 'normal', opacity: 0.9 }}>
+        {weather.condition}
+      </span>
+    </span>
+  );
+};
 
 // Schedule data embedded directly
 const scheduleDataJson = [
@@ -143,6 +234,77 @@ const App = () => {
   const [selectedDate, setSelectedDate] = useState('all');
   const [showGames, setShowGames] = useState('all');
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+  const [gameStatuses, setGameStatuses] = useState({});
+  const [weather, setWeather] = useState(null);
+
+  // Load game statuses from localStorage on mount
+  useEffect(() => {
+    const savedStatuses = localStorage.getItem('dgsl-game-statuses');
+    if (savedStatuses) {
+      try {
+        setGameStatuses(JSON.parse(savedStatuses));
+      } catch (e) {
+        console.error('Failed to load game statuses:', e);
+      }
+    }
+  }, []);
+
+  // Fetch weather data for Durham, NC
+  useEffect(() => {
+    const fetchWeather = async () => {
+      try {
+        // Using wttr.in API for simple weather data (no API key needed)
+        const response = await fetch('https://wttr.in/Durham,NC?format=j1');
+        const data = await response.json();
+
+        if (data && data.current_condition && data.current_condition[0]) {
+          const current = data.current_condition[0];
+          setWeather({
+            temp: current.temp_F,
+            condition: current.weatherDesc[0].value,
+            icon: current.weatherCode,
+            feelsLike: current.FeelsLikeF,
+            humidity: current.humidity,
+            windSpeed: current.windspeedMiles
+          });
+        }
+      } catch (error) {
+        console.error('Failed to fetch weather:', error);
+      }
+    };
+
+    fetchWeather();
+    // Refresh weather every 30 minutes
+    const interval = setInterval(fetchWeather, 30 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Save game statuses to localStorage whenever they change
+  useEffect(() => {
+    if (Object.keys(gameStatuses).length > 0) {
+      localStorage.setItem('dgsl-game-statuses', JSON.stringify(gameStatuses));
+    }
+  }, [gameStatuses]);
+
+  // Generate unique game ID
+  const getGameId = (match) => {
+    return `${match.date}-${match.time}-${match.ageGroup}`;
+  };
+
+  // Get the current status of a game
+  const getGameStatus = (match) => {
+    const gameId = getGameId(match);
+    return gameStatuses[gameId] || match.status || 'Scheduled';
+  };
+
+  // Update game status
+  const updateGameStatus = (match, newStatus) => {
+    const gameId = getGameId(match);
+    setGameStatuses(prev => ({
+      ...prev,
+      [gameId]: newStatus
+    }));
+  };
 
   const uniqueDates = useMemo(() => {
     const dates = [...new Set(scheduleDataJson.map(match => match.date))];
@@ -160,15 +322,18 @@ const App = () => {
 
   const filteredMatches = useMemo(() => {
     let matches = scheduleDataJson.filter(match => {
+      const currentStatus = getGameStatus(match);
       const ageGroupMatch = selectedAgeGroup === 'all' || match.ageGroup === selectedAgeGroup;
       const fieldMatch = selectedField === 'all' || match.field === selectedField;
       const dateMatch = selectedDate === 'all' || match.date === selectedDate;
-      const teamMatch = selectedTeam === 'all' || 
+      const teamMatch = selectedTeam === 'all' ||
         match.team1 === selectedTeam || match.team2 === selectedTeam;
-      const gameMatch = showGames === 'all' || 
-        (showGames === 'rain' && match.status === 'Rain Make Up') ||
-        (showGames === 'scheduled' && !match.status);
-      
+      const gameMatch = showGames === 'all' ||
+        (showGames === 'rain' && currentStatus === 'Rain Make Up') ||
+        (showGames === 'scheduled' && currentStatus === 'Scheduled') ||
+        (showGames === 'played' && currentStatus === 'Played') ||
+        (showGames === 'cancelled' && currentStatus === 'Cancelled');
+
       return ageGroupMatch && fieldMatch && dateMatch && teamMatch && gameMatch;
     });
 
@@ -203,7 +368,8 @@ const App = () => {
     }
 
     return matches;
-  }, [selectedAgeGroup, selectedField, selectedDate, selectedTeam, showGames, sortConfig]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedAgeGroup, selectedField, selectedDate, selectedTeam, showGames, sortConfig, gameStatuses]);
 
   const handleSort = (key) => {
     let direction = 'asc';
@@ -242,13 +408,25 @@ const App = () => {
 
       <div style={styles.ageBanner}>
         <h2 style={styles.ageBannerText}>
-          <span>🏆</span> Ages {selectedAgeGroup === 'all' ? '6-13' : selectedAgeGroup}: Upper Fields 1 - 3
+          <span>🏆</span>
+          {selectedAgeGroup === 'all' ? 'All Age Groups (6-13)' : `Ages ${selectedAgeGroup}`}
+          {' • '}
+          {filteredMatches.length} {filteredMatches.length === 1 ? 'Game' : 'Games'}
+          {selectedTeam !== 'all' && ` • Team: ${selectedTeam}`}
+          {selectedDate !== 'all' && ` • Date: ${formatDate(selectedDate)}`}
+          {showGames !== 'all' && ` • ${showGames.charAt(0).toUpperCase() + showGames.slice(1)}`}
+          {weather && (
+            <>
+              <span style={{ margin: '0 0.25rem' }}>•</span>
+              <WeatherWidget weather={weather} />
+            </>
+          )}
         </h2>
       </div>
 
       <div style={styles.rainNotice}>
         <p style={styles.rainNoticeText}>
-          <span>⚠️</span> Rain Make Up games highlighted in yellow
+          <span>ℹ️</span> Game Status Colors: Green = Played | Red = Cancelled | Yellow = Rain Make Up
         </p>
       </div>
 
@@ -317,6 +495,8 @@ const App = () => {
             >
               <option value="all">All Games</option>
               <option value="scheduled">Scheduled</option>
+              <option value="played">Played</option>
+              <option value="cancelled">Cancelled</option>
               <option value="rain">Rain Make Ups</option>
             </select>
           </div>
@@ -328,20 +508,20 @@ const App = () => {
           <table style={styles.table}>
             <thead>
               <tr style={styles.tableHeader}>
-                <th 
+                <th
                   style={{...styles.th, cursor: 'pointer', userSelect: 'none'}}
                   onClick={() => handleSort('date')}
                 >
                   DATE{getSortIndicator('date')}
                 </th>
-                <th 
+                <th
                   style={{...styles.th, cursor: 'pointer', userSelect: 'none'}}
                   onClick={() => handleSort('time')}
                 >
                   TIME{getSortIndicator('time')}
                 </th>
                 <th style={styles.th}>FIELD</th>
-                <th 
+                <th
                   style={{...styles.th, cursor: 'pointer', userSelect: 'none'}}
                   onClick={() => handleSort('team1')}
                 >
@@ -350,34 +530,65 @@ const App = () => {
                 <th style={styles.thCenter}></th>
                 <th style={styles.th}>AWAY TEAM</th>
                 <th style={styles.th}>LOCATION</th>
+                <th style={styles.th}>STATUS</th>
               </tr>
             </thead>
             <tbody>
               {filteredMatches.length > 0 ? (
-                filteredMatches.map((match, idx) => (
-                  <tr 
-                    key={idx} 
-                    style={{
-                      ...styles.tableRow,
-                      backgroundColor: match.status === 'Rain Make Up' ? '#fef3c7' : (idx % 2 === 0 ? '#ffffff' : '#f9fafb')
-                    }}
-                  >
-                    <td style={styles.td}>{formatDate(match.date)}</td>
-                    <td style={{...styles.td, color: '#2563eb', fontWeight: '500'}}>{match.time}</td>
-                    <td style={styles.td}>
-                      <span style={styles.fieldBadge}>
-                        {match.field}
-                      </span>
-                    </td>
-                    <td style={{...styles.td, fontWeight: '500'}}>{match.team1}</td>
-                    <td style={{...styles.td, textAlign: 'center', color: '#9ca3af', fontSize: '12px'}}>vs</td>
-                    <td style={{...styles.td, fontWeight: '500'}}>{match.team2}</td>
-                    <td style={{...styles.td, color: '#6b7280'}}>Merrick-Moore</td>
-                  </tr>
-                ))
+                filteredMatches.map((match, idx) => {
+                  const currentStatus = getGameStatus(match);
+                  let rowColor;
+                  if (currentStatus === 'Played') {
+                    rowColor = '#dcfce7'; // Light green
+                  } else if (currentStatus === 'Cancelled') {
+                    rowColor = '#fee2e2'; // Light red
+                  } else if (currentStatus === 'Rain Make Up') {
+                    rowColor = '#fef3c7'; // Yellow
+                  } else {
+                    rowColor = idx % 2 === 0 ? '#ffffff' : '#f9fafb'; // Default alternating
+                  }
+
+                  return (
+                    <tr
+                      key={idx}
+                      style={{
+                        ...styles.tableRow,
+                        backgroundColor: rowColor
+                      }}
+                    >
+                      <td style={styles.td}>{formatDate(match.date)}</td>
+                      <td style={{...styles.td, color: '#3562A6', fontWeight: '500'}}>{match.time}</td>
+                      <td style={styles.td}>
+                        <span style={styles.fieldBadge}>
+                          {match.field}
+                        </span>
+                      </td>
+                      <td style={{...styles.td, fontWeight: '500'}}>
+                        <TeamFlag teamName={match.team1} />
+                      </td>
+                      <td style={{...styles.td, textAlign: 'center', color: '#9ca3af', fontSize: '12px'}}>vs</td>
+                      <td style={{...styles.td, fontWeight: '500'}}>
+                        <TeamFlag teamName={match.team2} />
+                      </td>
+                      <td style={{...styles.td, color: '#6b7280'}}>Merrick-Moore</td>
+                      <td style={styles.td}>
+                        <select
+                          value={currentStatus}
+                          onChange={(e) => updateGameStatus(match, e.target.value)}
+                          style={styles.statusSelect}
+                        >
+                          <option value="Scheduled">Scheduled</option>
+                          <option value="Played">Played</option>
+                          <option value="Cancelled">Cancelled</option>
+                          <option value="Rain Make Up">Rain Make Up</option>
+                        </select>
+                      </td>
+                    </tr>
+                  );
+                })
               ) : (
                 <tr>
-                  <td colSpan="7" style={styles.noResults}>
+                  <td colSpan="8" style={styles.noResults}>
                     No matches found matching your filters
                   </td>
                 </tr>
@@ -393,10 +604,10 @@ const App = () => {
 const styles = {
   container: {
     minHeight: '100vh',
-    background: 'linear-gradient(to bottom right, #1e3a8a, #1e40af)',
+    background: 'linear-gradient(to bottom right, #091442, #0E1E5B)',
   },
   header: {
-    backgroundColor: '#1e40af',
+    backgroundColor: '#0E1E5B',
     color: 'white',
     padding: '2rem 1rem',
     textAlign: 'center',
@@ -426,23 +637,25 @@ const styles = {
     marginBottom: '0.25rem',
   },
   ageBanner: {
-    backgroundColor: '#16a34a',
+    backgroundColor: '#3562A6',
     color: 'white',
     padding: '0.75rem 1rem',
     textAlign: 'center',
   },
   ageBannerText: {
-    fontSize: '1.25rem',
+    fontSize: '1.125rem',
     fontWeight: 'bold',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    flexWrap: 'wrap',
     gap: '0.5rem',
     margin: 0,
+    lineHeight: '1.6',
   },
   rainNotice: {
-    backgroundColor: '#fef3c7',
-    color: '#92400e',
+    backgroundColor: '#6594C0',
+    color: '#0B0B0B',
     padding: '0.5rem 1rem',
     textAlign: 'center',
   },
@@ -501,7 +714,7 @@ const styles = {
     borderCollapse: 'collapse',
   },
   tableHeader: {
-    backgroundColor: '#1f2937',
+    backgroundColor: '#091442',
     color: 'white',
   },
   th: {
@@ -532,13 +745,22 @@ const styles = {
     borderRadius: '9999px',
     fontSize: '0.75rem',
     fontWeight: '600',
-    backgroundColor: '#16a34a',
+    backgroundColor: '#3562A6',
     color: 'white',
   },
   noResults: {
     padding: '2rem 1rem',
     textAlign: 'center',
     color: '#6b7280',
+  },
+  statusSelect: {
+    padding: '0.375rem 0.5rem',
+    border: '1px solid #d1d5db',
+    borderRadius: '0.25rem',
+    fontSize: '0.75rem',
+    backgroundColor: 'white',
+    cursor: 'pointer',
+    minWidth: '110px',
   },
 };
 
