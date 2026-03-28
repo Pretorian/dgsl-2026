@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/dgsl-2026/static/css/main.6374af2b.css",
-    "main.js": "/dgsl-2026/static/js/main.ef142294.js",
+    "main.js": "/dgsl-2026/static/js/main.992ae693.js",
     "index.html": "/dgsl-2026/index.html",
     "main.6374af2b.css.map": "/dgsl-2026/static/css/main.6374af2b.css.map",
-    "main.ef142294.js.map": "/dgsl-2026/static/js/main.ef142294.js.map"
+    "main.992ae693.js.map": "/dgsl-2026/static/js/main.992ae693.js.map"
   },
   "entrypoints": [
     "static/css/main.6374af2b.css",
-    "static/js/main.ef142294.js"
+    "static/js/main.992ae693.js"
   ]
 }
