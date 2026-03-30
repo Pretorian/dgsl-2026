@@ -28,6 +28,20 @@ const getFlagUrl = (teamName) => {
   return `https://flagcdn.com/w40/${code}.png`;
 };
 
+// Helper function to get age group color
+const getAgeGroupColor = (ageGroup) => {
+  switch(ageGroup) {
+    case '6-8':
+      return '#3B82F6'; // Blue
+    case '9-10':
+      return '#10B981'; // Green
+    case '11-13':
+      return '#F59E0B'; // Orange
+    default:
+      return '#6B7280'; // Gray
+  }
+};
+
 // TeamFlag component
 const TeamFlag = ({ teamName }) => {
   const flagUrl = getFlagUrl(teamName);
@@ -427,6 +441,22 @@ const App = () => {
       <div style={styles.rainNotice}>
         <p style={styles.rainNoticeText}>
           <span>ℹ️</span> Game Status Colors: Green = Played | Red = Cancelled | Yellow = Rain Make Up
+          <span style={{ margin: '0 0.5rem' }}>•</span>
+          Age Groups:
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', marginLeft: '0.25rem' }}>
+            <span style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#3B82F6', display: 'inline-block' }}></span>
+            6-8
+          </span>
+          {' | '}
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+            <span style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#10B981', display: 'inline-block' }}></span>
+            9-10
+          </span>
+          {' | '}
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+            <span style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#F59E0B', display: 'inline-block' }}></span>
+            11-13
+          </span>
         </p>
       </div>
 
@@ -520,6 +550,7 @@ const App = () => {
                 >
                   TIME{getSortIndicator('time')}
                 </th>
+                <th style={styles.th}>AGE GROUP</th>
                 <th style={styles.th}>FIELD</th>
                 <th
                   style={{...styles.th, cursor: 'pointer', userSelect: 'none'}}
@@ -559,6 +590,19 @@ const App = () => {
                       <td style={styles.td}>{formatDate(match.date)}</td>
                       <td style={{...styles.td, color: '#3562A6', fontWeight: '500'}}>{match.time}</td>
                       <td style={styles.td}>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                          <span style={{
+                            width: '16px',
+                            height: '16px',
+                            borderRadius: '50%',
+                            backgroundColor: getAgeGroupColor(match.ageGroup),
+                            display: 'inline-block',
+                            flexShrink: 0
+                          }}></span>
+                          <span style={{ fontWeight: '500' }}>{match.ageGroup}</span>
+                        </span>
+                      </td>
+                      <td style={styles.td}>
                         <span style={styles.fieldBadge}>
                           {match.field}
                         </span>
@@ -588,7 +632,7 @@ const App = () => {
                 })
               ) : (
                 <tr>
-                  <td colSpan="8" style={styles.noResults}>
+                  <td colSpan="9" style={styles.noResults}>
                     No matches found matching your filters
                   </td>
                 </tr>
