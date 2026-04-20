@@ -1,6 +1,6 @@
 ## Quick Start
 
-### Prerequisites
+### Prerequisites:
 
 - Node.js (version 14 or higher)
 - npm (comes with Node.js)
