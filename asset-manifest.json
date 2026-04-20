@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/dgsl-2026/static/css/main.058c65f4.css",
+    "main.js": "/dgsl-2026/static/js/main.ce114141.js",
+    "index.html": "/dgsl-2026/index.html",
+    "main.058c65f4.css.map": "/dgsl-2026/static/css/main.058c65f4.css.map",
+    "main.ce114141.js.map": "/dgsl-2026/static/js/main.ce114141.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.058c65f4.css",
+    "static/js/main.ce114141.js"
+  ]
+}
