@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(npm run deploy:*)",
+      "Bash(PORT=4000 npm start)",
+      "Bash(npm audit fix:*)",
+      "Bash(npm outdated:*)",
+      "Bash(mkdir:*)",
+      "Bash(npm test:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
