@@ -27,7 +27,7 @@ body {
   position: absolute;
   top: -40px;
   left: 0;
-  background: #0E1E5B;
+  background: linear-gradient(135deg, #191970 0%, #4169E1 100%);
   color: white;
   padding: 8px 16px;
   text-decoration: none;
@@ -43,14 +43,14 @@ body {
    ========================================== */
 .app-container {
   min-height: 100vh;
-  background: linear-gradient(to bottom right, #091442, #0E1E5B);
+  background: linear-gradient(135deg, #000080 0%, #191970 25%, #4169E1 50%, #1E90FF 75%, #87CEEB 100%);
 }
 
 /* ==========================================
    Header Section
    ========================================== */
 .site-header {
-  background-color: #0E1E5B;
+  background: linear-gradient(90deg, #191970 0%, #4169E1 100%);
   color: white;
   padding: 2rem 1rem;
   text-align: center;
@@ -75,7 +75,7 @@ body {
    Age Banner
    ========================================== */
 .age-banner {
-  background-color: #3562A6;
+  background: linear-gradient(90deg, #4169E1 0%, #1E90FF 100%);
   color: white;
   padding: 0.75rem 1rem;
   text-align: center;
@@ -97,8 +97,8 @@ body {
    Info Notice Banner
    ========================================== */
 .info-notice {
-  background-color: #6594C0;
-  color: #0B0B0B;
+  background: linear-gradient(90deg, #87CEEB 0%, #00BFFF 100%);
+  color: #000080;
   padding: 0.5rem 1rem;
   text-align: center;
 }
@@ -127,7 +127,7 @@ body {
 }
 
 .age-group-dot-blue {
-  background-color: #3B82F6;
+  background: linear-gradient(135deg, #1E90FF 0%, #00BFFF 100%);
 }
 
 .age-group-dot-green {
@@ -164,7 +164,7 @@ body {
 .filters-title {
   font-size: 1rem;
   font-weight: 600;
-  color: #0E1E5B;
+  color: #191970;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -174,7 +174,7 @@ body {
 .filters-toggle-btn {
   background: none;
   border: none;
-  color: #3562A6;
+  color: #4169E1;
   font-size: 1.5rem;
   cursor: pointer;
   padding: 0.25rem;
@@ -187,7 +187,7 @@ body {
 }
 
 .filters-toggle-btn:focus {
-  outline: 2px solid #3562A6;
+  outline: 2px solid #4169E1;
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -243,22 +243,22 @@ body {
 
 /* Focus states for accessibility */
 .filter-select:focus {
-  outline: 2px solid #3562A6;
+  outline: 2px solid #4169E1;
   outline-offset: 2px;
-  border-color: #3562A6;
+  border-color: #4169E1;
 }
 
 .filter-select:hover {
-  border-color: #3562A6;
+  border-color: #4169E1;
 }
 
 /* ==========================================
    Featured Matches Section
    ========================================== */
 .featured-matches-section {
-  background-color: #f9fafb;
+  background: linear-gradient(180deg, #f0f8ff 0%, #e6f2ff 100%);
   padding: 2rem 1rem;
-  border-top: 3px solid #3562A6;
+  border-top: 3px solid #4169E1;
 }
 
 .featured-matches-container {
@@ -270,7 +270,7 @@ body {
 .featured-matches-title {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #0E1E5B;
+  color: #191970;
   margin-bottom: 1.5rem;
   display: flex;
   align-items: center;
@@ -308,7 +308,7 @@ body {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background-color: #3562A6;
+  background: linear-gradient(135deg, #4169E1 0%, #1E90FF 100%);
   color: white;
   border: none;
   border-radius: 50%;
@@ -321,17 +321,17 @@ body {
   font-size: 1.5rem;
   z-index: 10;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(65, 105, 225, 0.3);
 }
 
 .carousel-nav-btn:hover:not(:disabled) {
-  background-color: #0E1E5B;
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, #191970 0%, #4169E1 100%);
+  box-shadow: 0 6px 8px rgba(65, 105, 225, 0.4);
   transform: translateY(-50%) scale(1.1);
 }
 
 .carousel-nav-btn:focus {
-  outline: 3px solid #3562A6;
+  outline: 3px solid #1E90FF;
   outline-offset: 3px;
 }
 
@@ -374,12 +374,12 @@ body {
 }
 
 .carousel-indicator:focus {
-  outline: 2px solid #3562A6;
+  outline: 2px solid #4169E1;
   outline-offset: 2px;
 }
 
 .carousel-indicator.active {
-  background-color: #3562A6;
+  background-color: #4169E1;
   width: 32px;
   border-radius: 6px;
 }
@@ -402,13 +402,13 @@ body {
 .featured-match-card:hover,
 .featured-match-card:focus-within {
   transform: translateY(-4px);
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
-  border-color: #3562A6;
+  box-shadow: 0 8px 12px rgba(65, 105, 225, 0.3);
+  border-color: #4169E1;
 }
 
 /* Keyboard focus indicator */
 .featured-match-card:focus {
-  outline: 3px solid #3562A6;
+  outline: 3px solid #4169E1;
   outline-offset: 2px;
 }
 
@@ -436,7 +436,7 @@ body {
 .match-time {
   font-size: 0.875rem;
   font-weight: 500;
-  color: #3562A6;
+  color: #4169E1;
 }
 
 .match-age-badge {
@@ -451,7 +451,7 @@ body {
 }
 
 .match-age-badge-blue {
-  background-color: #3B82F6;
+  background: linear-gradient(135deg, #1E90FF 0%, #00BFFF 100%);
 }
 
 .match-age-badge-green {
@@ -590,7 +590,7 @@ body {
 }
 
 .table-header-row {
-  background-color: #091442;
+  background: linear-gradient(90deg, #000080 0%, #191970 100%);
   color: white;
 }
 
@@ -616,7 +616,7 @@ body {
 }
 
 .table-header-sortable:hover {
-  background-color: #0a1a56;
+  background-color: #4169E1;
 }
 
 .table-header-sortable:focus {
@@ -659,7 +659,7 @@ body {
 }
 
 .table-cell-time {
-  color: #3562A6;
+  color: #4169E1;
   font-weight: 500;
 }
 
@@ -701,7 +701,7 @@ body {
   border-radius: 9999px;
   font-size: 0.75rem;
   font-weight: 600;
-  background-color: #3562A6;
+  background: linear-gradient(135deg, #4169E1 0%, #1E90FF 100%);
   color: white;
 }
 
@@ -717,13 +717,13 @@ body {
 }
 
 .status-select:focus {
-  outline: 2px solid #3562A6;
+  outline: 2px solid #4169E1;
   outline-offset: 2px;
-  border-color: #3562A6;
+  border-color: #4169E1;
 }
 
 .status-select:hover {
-  border-color: #3562A6;
+  border-color: #4169E1;
 }
 
 .no-results {
@@ -777,7 +777,7 @@ body {
 .dialog-title {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #0E1E5B;
+  color: #191970;
   margin: 0;
   display: flex;
   align-items: center;
@@ -806,7 +806,7 @@ body {
 }
 
 .dialog-close-btn:focus {
-  outline: 2px solid #3562A6;
+  outline: 2px solid #4169E1;
   outline-offset: 2px;
 }
 
@@ -840,21 +840,21 @@ body {
 }
 
 .team-card:hover {
-  border-color: #3562A6;
-  background-color: #f9fafb;
+  border-color: #4169E1;
+  background-color: #f0f8ff;
   transform: translateY(-2px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(65, 105, 225, 0.2);
 }
 
 .team-card:focus {
-  outline: 3px solid #3562A6;
+  outline: 3px solid #4169E1;
   outline-offset: 2px;
 }
 
 .team-card.selected {
-  border-color: #3562A6;
-  background-color: #eff6ff;
-  box-shadow: 0 0 0 3px rgba(53, 98, 166, 0.1);
+  border-color: #4169E1;
+  background: linear-gradient(135deg, #f0f8ff 0%, #e6f2ff 100%);
+  box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.2);
 }
 
 .team-card-flag {
@@ -874,7 +874,7 @@ body {
 }
 
 .team-card.selected .team-card-name {
-  color: #3562A6;
+  color: #4169E1;
 }
 
 .dialog-actions {
@@ -899,16 +899,16 @@ body {
 }
 
 .dialog-btn-primary {
-  background-color: #3562A6;
+  background: linear-gradient(135deg, #4169E1 0%, #1E90FF 100%);
   color: white;
 }
 
 .dialog-btn-primary:hover {
-  background-color: #0E1E5B;
+  background: linear-gradient(135deg, #191970 0%, #4169E1 100%);
 }
 
 .dialog-btn-primary:focus {
-  outline: 2px solid #3562A6;
+  outline: 2px solid #1E90FF;
   outline-offset: 2px;
 }
 
@@ -919,16 +919,16 @@ body {
 }
 
 .dialog-btn-secondary:hover {
-  background-color: #f9fafb;
+  background-color: #f0f8ff;
 }
 
 .dialog-btn-secondary:focus {
-  outline: 2px solid #3562A6;
+  outline: 2px solid #4169E1;
   outline-offset: 2px;
 }
 
 .favorite-team-btn {
-  background-color: #3562A6;
+  background: linear-gradient(135deg, #4169E1 0%, #1E90FF 100%);
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -944,13 +944,13 @@ body {
 }
 
 .favorite-team-btn:hover {
-  background-color: #0E1E5B;
+  background: linear-gradient(135deg, #191970 0%, #4169E1 100%);
   transform: translateY(-1px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(65, 105, 225, 0.3);
 }
 
 .favorite-team-btn:focus {
-  outline: 2px solid #3562A6;
+  outline: 2px solid #1E90FF;
   outline-offset: 2px;
 }
 
@@ -958,7 +958,7 @@ body {
    Footer Section
    ========================================== */
 .site-footer {
-  background-color: #0E1E5B;
+  background: linear-gradient(90deg, #191970 0%, #4169E1 100%);
   color: white;
   padding: 2rem 1rem;
   text-align: center;
