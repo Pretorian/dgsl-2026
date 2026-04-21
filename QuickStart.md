@@ -64,3 +64,27 @@ The schedule data is embedded directly in the `App.js` file. Each game contains:
 - **team2**: Away team name
 - **field**: "Upper Fields 1-3"
 - **status**: "Rain Make Up" (optional, only for makeup games)
+
+## Updating the Schedule
+
+To update the schedule data, edit the `scheduleDataJson` array in `src/App.js`. Follow the existing data structure format.
+
+Web application for viewing and filtering the Durham Girls Soccer League (DGSL) Spring 2026 game schedule.
+
+## Features
+
+- **Filter by Age Group**: 6-8, 9-10, or 11-13
+- **Filter by Team**: Select any team to see their matches
+- **Filter by Date**: View games on specific dates
+- **Filter by Game Type**: All games, scheduled games, or rain make-ups
+- **Sortable Columns**: Click on Date, Time, or Home Team headers to sort (ascending/descending)
+- **Visual Indicators**: Rain Make Up games highlighted in yellow
+- **Responsive Design**: Works on desktop, tablet, and mobile devices
+
+## Troubleshooting
+
+**Port already in use**
+If port 3000 is already in use, you can:
+- Stop the other application using port 3000
+- Or start on a different port: `PORT=3001 npm start`
+
