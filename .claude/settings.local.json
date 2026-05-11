@@ -11,7 +11,14 @@
       "Bash(git ls-tree:*)",
       "WebFetch(domain:pretorian.github.io)",
       "Bash(git checkout:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(find:*)",
+      "Bash(git -C /Users/x/work/DGSL-2026 log --all --full-history --oneline)",
+      "Bash(git -C /Users/x/work/DGSL-2026 ls-tree -r master)",
+      "Bash(git -C /Users/x/work/DGSL-2026 show master:src/App.js)",
+      "Bash(git -C /Users/x/work/DGSL-2026 show master:src/components/ScheduleTable.js)",
+      "Bash(git -C /Users/x/work/DGSL-2026 show master:src/constants/index.js)",
+      "Bash(git -C /Users/x/work/DGSL-2026 show master:src/utils/helpers.js)"
     ],
     "deny": [],
     "ask": []
