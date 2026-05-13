@@ -5,7 +5,7 @@
 Create the following folder structure and save each file in its proper location:
 
 ```
-dgsl-schedule-filter/
+dgsl-2026ß/
 ├── public/
 │   └── index.html
 ├── src/
