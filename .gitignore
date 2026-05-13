@@ -1,8 +1,9 @@
 # Dependencies
 node_modules/
 
-# Production (build folder not used, we use docs/ for GitHub Pages)
+# Production build output (built in CI by .github/workflows/deploy.yml)
 build/
+docs/
 
 # Testing
 coverage/
@@ -18,5 +19,3 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Keep docs folder for GitHub Pages deployment
-!docs/
